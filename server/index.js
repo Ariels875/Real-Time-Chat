@@ -71,17 +71,11 @@ io.on('connection', async (socket) => {
 
 app.use(logger('dev'))
 
-app.get('/', (req, res) => {
-  res.sendFile(process.cwd() + '/client/index.html')
-})
+app.use(express.static('client'));
 
-app.use(express.static('public', {
-  setHeaders: (res, path, stat) => {
-    if (path.endsWith('.css')) {
-      res.setHeader('Content-Type', 'text/css');
-    }
-  }
-}));
+app.get('/', (req, res) => {
+  res.sendFile(__dirname + '/index.html');
+});
 
 server.listen(port, () => {
   console.log(`Server running on port ${port}`)
