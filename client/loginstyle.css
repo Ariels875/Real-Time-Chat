@@ -7,7 +7,30 @@ html {
     font-family: sans-serif;
     background: linear-gradient(#141e30, #243b55);
   }
-  
+  .toggle-button {
+      cursor: pointer;
+      display: inline-block;
+      padding: 10px 20px;
+      color: #03e9f4;
+      font-size: 16px;
+      text-decoration: none;
+      text-transform: uppercase;
+      overflow: hidden;
+      transition: .5s;
+      margin-top: 20px;
+      letter-spacing: 4px;
+      background: none;
+      border: none;
+  }
+  .toggle-button:hover {
+      background: #03e9f4;
+      color: #fff;
+      border-radius: 5px;
+      box-shadow: 0 0 5px #03e9f4,
+                  0 0 25px #03e9f4,
+                  0 0 50px #03e9f4,
+                  0 0 100px #03e9f4;
+  }
   .login-box {
     position: absolute;
     top: 50%;
@@ -26,6 +49,13 @@ html {
     padding: 0;
     color: #fff;
     text-align: center;
+  }
+
+  h3 {
+    margin: 50px 0 0;
+    padding: 0;
+    color: #fff;
+    text-align:left;
   }
   
   .login-box .user-box {

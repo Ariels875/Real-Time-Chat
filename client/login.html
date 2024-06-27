@@ -3,46 +3,97 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>Login and Register</title>
     <link rel="stylesheet" href="loginstyle.css">
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-
 </head>
 <body>
-    <div class="login-box">
+    <div class="login-box" id="login-box">
         <h2>Login</h2>
-        <form>
-          <div class="user-box">
-            <input type="text" name="" required="">
-            <label>Usuario</label>
-          </div>
-          <div class="user-box">
-            <input type="password" name="" required="">
-            <label>Contraseña</label>
-          </div>
-          <div class="SessionStart-box">
-            <a href="#">
-              <span></span>
-              <span></span>
-              <span></span>
-              <span></span>
-              Iniciar Sesion
+        <form id="login-form">
+            <div class="user-box">
+                <input type="text" name="username" required>
+                <label>Username</label>
+            </div>
+            <div class="user-box">
+                <input type="password" name="password" required>
+                <label>Password</label>
+            </div>
+            <a href="#" onclick="submitForm('login-form')">
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                Login
             </a>
-          </div>
-          <br>
-          <br>
-          <br>
-          <div class="register-box">
-            <h4>No tienes una cuenta?</h4>
-            <a href="#">
-              <span></span>
-              <span></span>
-              <span></span>
-              <span></span>
-              Registrarse
-            </a>
-          </div>
         </form>
+        <h3>Don't have an account?</h3>
+        <button class="toggle-button" onclick="toggleForms()">Show Register Options</button>
     </div>
+
+    <div class="login-box" id="register-box" style="display: none;">
+        <h2>Register</h2>
+        <form id="register-form">
+            <div class="user-box">
+                <input type="text" name="username" required>
+                <label>Username</label>
+            </div>
+            <div class="user-box">
+                <input type="password" name="password" required>
+                <label>Password</label>
+            </div>
+            <a href="#" onclick="submitForm('register-form')">
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                Register
+            </a>
+        </form>
+        <h3>Already have an account?</h3>
+        <button class="toggle-button" onclick="toggleForms()">Show Login Options</button>
+    </div>
+
+    <script>
+        function toggleForms() {
+            const loginBox = document.getElementById('login-box');
+            const registerBox = document.getElementById('register-box');
+            if (loginBox.style.display === 'none') {
+                loginBox.style.display = 'block';
+                registerBox.style.display = 'none';
+            } else {
+                loginBox.style.display = 'none';
+                registerBox.style.display = 'block';
+            }
+        }
+
+        async function submitForm(formId) {
+            const form = document.getElementById(formId);
+            const formData = new FormData(form);
+            const data = Object.fromEntries(formData.entries());
+            
+            const url = formId === 'login-form' ? '/auth/login' : '/auth/register';
+            
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                if (!response.ok) {
+                    throw new Error('Network response was not ok ' + response.statusText);
+                }
+                
+                const result = await response.json();
+                console.log(result);
+                alert(formId === 'login-form' ? 'Logged in successfully!' : 'Registered successfully!');
+            } catch (error) {
+                console.error('There was a problem with the fetch operation:', error);
+                alert('An error occurred: ' + error.message);
+            }
+        }
+    </script>
 </body>
 </html>
