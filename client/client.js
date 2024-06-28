@@ -1,45 +1,59 @@
-import { io } from 'https://cdn.socket.io/4.3.2/socket.io.esm.min.js'
-      
+import { io } from 'https://cdn.socket.io/4.3.2/socket.io.esm.min.js';
+
+// Función para obtener el nombre de usuario
 const getUsername = async () => {
-  const username = localStorage.getItem('username')
-  if (username) {
-    console.log(`User existed ${username}`)
-    return username
+  try {
+    const response = await fetch('/username');
+    if (!response.ok) throw new Error('Network response was not ok');
+    const data = await response.json();
+    return data.username;
+  } catch (error) {
+    console.error('Error fetching username:', error);
+    return null;
+  }
+};
+
+// Verificar si el usuario está loggeado
+const init = async () => {
+  const username = await getUsername();
+
+  if (!username) {
+    // Redirigir al usuario a la página de login si no está autenticado
+    window.location.href = '/login';
+    return;
   }
 
-  const res = await fetch('https://random-data-api.com/api/users/random_user')
-  const { username: randomUsername } = await res.json()
+  // Conectar el socket si el usuario está autenticado
+  const socket = io({
+    auth: {
+      username,
+      serverOffset: 0,
+    },
+  });
 
-  localStorage.setItem('username', randomUsername)
-  return randomUsername
-}
+  const form = document.getElementById('form');
+  const input = document.getElementById('input');
+  const messages = document.getElementById('messages');
 
-const socket = io({
-  auth: {
-    username: await getUsername(),
-    serverOffset: 0
-  }
-})
+  socket.on('chat message', (msg, serverOffset, username) => {
+    const item = `<li>
+      <p>${msg}</p>
+      <small>${username}</small>
+    </li>`;
+    messages.insertAdjacentHTML('beforeend', item);
+    socket.auth.serverOffset = serverOffset;
+    messages.scrollTop = messages.scrollHeight;
+  });
 
-const form = document.getElementById('form')
-const input = document.getElementById('input')
-const messages = document.getElementById('messages')
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
 
-socket.on('chat message', (msg, serverOffset, username) => {
-  const item = `<li>
-    <p>${msg}</p>
-    <small>${username}</small>
-  </li>`
-  messages.insertAdjacentHTML('beforeend', item)
-  socket.auth.serverOffset = serverOffset
-  messages.scrollTop = messages.scrollHeight
-})
+    if (input.value) {
+      socket.emit('chat message', input.value);
+      input.value = '';
+    }
+  });
+};
 
-form.addEventListener('submit', (e) => {
-  e.preventDefault()
-
-  if (input.value) {
-    socket.emit('chat message', input.value)
-    input.value = ''
-  }
-})
+// Inicializar la aplicación del cliente
+init();
