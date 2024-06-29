@@ -27,7 +27,7 @@ const io = new Server(server, {
 });
 
 const db = createClient({
-  url: 'libsql://better-stargirl-ariels875.turso.io',
+  url: process.env.TURSO_URL,
   authToken: process.env.DB_TOKEN
 });
 
