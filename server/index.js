@@ -13,9 +13,10 @@ import { dirname } from 'path';
 
 dotenv.config();
 
-const port = process.env.PORT ?? 3000;
+const port = process.env.PORT || 3000;
+process.env.NODE_ENV = 'production';
 
-// Define __dirname
+/* Define __dirname*/
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
@@ -30,15 +31,15 @@ const db = createClient({
   authToken: process.env.DB_TOKEN
 });
 
-// Middleware para parsear el cuerpo de las solicitudes POST y cookies
+/*Middleware para parsear el cuerpo de las solicitudes POST y cookies*/
 app.use(express.json());
 app.use(cookieParser());
 app.use(logger('dev'));
 
-// Servir archivos estáticos desde la carpeta 'client'
+/*Servir archivos estáticos desde la carpeta 'client'*/
 app.use(express.static('client'));
 
-// Middleware para verificar el token JWT
+/*Middleware para verificar el token JWT*/
 app.use((req, res, next) => {
   const token = req.cookies.access_token;
 
@@ -51,7 +52,7 @@ app.use((req, res, next) => {
   next();
 });
 
-// Rutas para la base de datos
+/*Rutas para la base de datos*/
 await db.execute(`
   CREATE TABLE IF NOT EXISTS messages (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -68,7 +69,7 @@ await db.execute(`
   )
 `);
 
-// Manejar conexiones de Socket.IO
+/* Manejar conexiones de Socket.IO */
 io.on('connection', async (socket) => {
   console.log('a user has connected!');
 
@@ -109,23 +110,23 @@ io.on('connection', async (socket) => {
   }
 });
 
-// Ruta para obtener el nombre de usuario
+/* Ruta para obtener el nombre de usuario */
 app.get('/username', (req, res) => {
   const { user } = req.session;
   if (!user) {
-    return res.status(401).json({ message: 'Unauthorized' });
+    return res.status(401).json({ message: 'Unauthorized xd' });
   }
   res.json({ username: user.username });
 });
 
-// Ruta protegida
+/* Ruta protegida */
 app.get('/index', (req, res) => {
   const { user } = req.session;
-  if (!user) return res.status(401).send('Unauthorized');
+  if (!user) return res.redirect('/login');
   res.sendFile(path.resolve(__dirname + '/../client/index.html'));
 });
 
-// Ruta principal
+/* Ruta principal */
 app.get('/', (req, res) => {
   const { user } = req.session;
   if (!user) {
@@ -135,27 +136,30 @@ app.get('/', (req, res) => {
   }
 });
 
-// Ruta para la página de login
+/* Ruta para la página de login */
 app.get('/login', (req, res) => {
   res.sendFile(path.resolve(__dirname + '/../client/login.html'));
 });
 
-// Ruta para la página de registro
+/* Ruta para la página de registro */
 app.get('/register', (req, res) => {
   res.sendFile(path.resolve(__dirname + '/../client/login.html'));
 });
 
-// Ruta para el login
+/* Ruta para el login */
 app.post('/login', async (req, res) => {
   const { username, password } = req.body;
   try {
     const user = await UserHandle.login(username, password);
+    if (!process.env.JWT_SECRET) {
+      throw new Error('JWT_SECRET is not set');
+    }
     const token = jwt.sign({ id: user.id, username: user.username }, process.env.JWT_SECRET, {
       expiresIn: '1h'
     });
     res
       .cookie('access_token', token, {
-        httpOnly: true,
+        httpsOnly: true,
         sameSite: 'strict',
         maxAge: 1000 * 60 * 60
       })
@@ -165,7 +169,7 @@ app.post('/login', async (req, res) => {
   }
 });
 
-// Ruta para el registro
+/* Ruta para el registro */
 app.post('/register', async (req, res) => {
   const { username, password } = req.body;
   try {
@@ -176,7 +180,7 @@ app.post('/register', async (req, res) => {
   }
 });
 
-// Ruta para el logout
+/* Ruta para el logout */
 app.post('/logout', (req, res) => {
   res
     .clearCookie('access_token')

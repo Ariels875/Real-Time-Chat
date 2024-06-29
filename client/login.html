@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login and Register</title>
+    <title>Ariels Login</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="stylesheet" href="loginstyle.css">
 </head>
@@ -54,7 +54,11 @@
         <button class="toggle-button" onclick="toggleForms()">Show Login Options</button>
     </div>
 
-    <script>
+    <div id="toast-container" class="toast-container"></div>
+    
+    <script type="module">
+        import { showToast } from './toast.js';
+
         function toggleForms() {
             const loginBox = document.getElementById('login-box');
             const registerBox = document.getElementById('register-box');
@@ -72,7 +76,7 @@
             const formData = new FormData(form);
             const data = Object.fromEntries(formData.entries());
             
-            const url = formId === 'login-form' ? '/auth/login' : '/auth/register';
+            const url = formId === 'login-form' ? '/login' : '/register';
             
             try {
                 const response = await fetch(url, {
@@ -84,17 +88,29 @@
                 });
 
                 if (!response.ok) {
-                    throw new Error('Network response was not ok ' + response.statusText);
+                    const errorText = await response.text();
+                    throw new Error(`Network response was not ok. Status: ${response.status}, Message: ${errorText}`);
                 }
                 
                 const result = await response.json();
                 console.log(result);
-                alert(formId === 'login-form' ? 'Logged in successfully!' : 'Registered successfully!');
+
+                if (formId === 'login-form') {
+                    showToast('Logged in successfully!', 'success');
+                    setTimeout(() => {
+                        window.location.href = '/index';
+                    }, 1000);
+                } else {
+                    showToast('Registered successfully!', 'success');
+                }
             } catch (error) {
                 console.error('There was a problem with the fetch operation:', error);
-                alert('An error occurred: ' + error.message);
+                showToast('An error occurred: ' + error.message, 'error');
             }
         }
+
+        window.toggleForms = toggleForms;
+        window.submitForm = submitForm;
     </script>
 </body>
 </html>

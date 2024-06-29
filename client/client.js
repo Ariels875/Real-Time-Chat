@@ -1,6 +1,7 @@
 import { io } from 'https://cdn.socket.io/4.3.2/socket.io.esm.min.js';
+import { showToast } from './toast.js';
 
-// Función para obtener el nombre de usuario
+/* Función para obtener el nombre de usuario */
 const getUsername = async () => {
   try {
     const response = await fetch('/username');
@@ -13,17 +14,17 @@ const getUsername = async () => {
   }
 };
 
-// Verificar si el usuario está loggeado
+/* Verificar si el usuario está loggeado */
 const init = async () => {
   const username = await getUsername();
 
   if (!username) {
-    // Redirigir al usuario a la página de login si no está autenticado
+    /* Redirigir al usuario a la página de login si no está autenticado */
     window.location.href = '/login';
     return;
   }
 
-  // Conectar el socket si el usuario está autenticado
+  /* Conectar el socket si el usuario está autenticado */
   const socket = io({
     auth: {
       username,
@@ -34,7 +35,8 @@ const init = async () => {
   const form = document.getElementById('form');
   const input = document.getElementById('input');
   const messages = document.getElementById('messages');
-
+  const logoutBtn = document.getElementById('logout-btn');
+  
   socket.on('chat message', (msg, serverOffset, username) => {
     const item = `<li>
       <p>${msg}</p>
@@ -53,7 +55,29 @@ const init = async () => {
       input.value = '';
     }
   });
+
+  logoutBtn.addEventListener('click', async () => {
+    try {
+      const response = await fetch('/logout', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      if (!response.ok) {
+        throw new Error('Network response was not ok ' + response.statusText);
+      }
+      showToast('Logged in successfully', 'success');
+      setTimeout(() => {
+        window.location.href = '/login';
+      }, 1000); /* Espera 1 segundo antes de redirigir */
+    } catch (error) {
+      console.error('There was a problem with the logout operation:', error);
+      showToast('Error al cerrar sesión: ' + error.message, 'error');
+    }
+  });
+
 };
 
-// Inicializar la aplicación del cliente
+/* Inicializar la aplicación del cliente */
 init();
