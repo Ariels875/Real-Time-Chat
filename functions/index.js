@@ -123,7 +123,7 @@ app.get('/username', (req, res) => {
 app.get('/index', (req, res) => {
   const { user } = req.session;
   if (!user) return res.redirect('/login');
-  res.sendFile(path.resolve(__dirname + '/../client/index.html'));
+  res.sendFile(path.resolve(__dirname + '/../dist/index.html'));
 });
 
 /* Ruta principal */
@@ -138,12 +138,12 @@ app.get('/', (req, res) => {
 
 /* Ruta para la página de login */
 app.get('/login', (req, res) => {
-  res.sendFile(path.resolve(__dirname + '/../client/login.html'));
+  res.sendFile(path.resolve(__dirname + '/../dist/login.html'));
 });
 
 /* Ruta para la página de registro */
 app.get('/register', (req, res) => {
-  res.sendFile(path.resolve(__dirname + '/../client/login.html'));
+  res.sendFile(path.resolve(__dirname + '/../dist/login.html'));
 });
 
 /* Ruta para el login */
