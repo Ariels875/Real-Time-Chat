@@ -1,6 +1,6 @@
 import { db } from './index.js';
-import crypto from 'crypto';
-import bcrypt from 'bcryptjs';
+import crypto from 'node:crypto';
+import bcrypt from 'bcrypt';
 
 export class UserHandle {
   static async create(username, password) {
