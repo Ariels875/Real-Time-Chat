@@ -1,11 +1,24 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ariels Login</title>
+    <title>ArielsChat Login</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="stylesheet" href="loginstyle.css">
+    <meta name="robots" content="index, follow">
+    <meta name="description" content="ArielsChat es una aplicación de chat en tiempo real que permite a los usuarios comunicarse de manera segura y fácil. Regístrate y empieza a chatear ahora.">
+    <meta name="keywords" content="chat en tiempo real, mensajería instantánea, ArielsChat, chat seguro, comunicación en línea">
+    <meta property="og:title" content="ArielsChat - Chat en Tiempo Real Seguro y Fácil de Usar">
+    <meta property="og:description" content="Únete a ArielsChat para una comunicación en tiempo real, segura y sin complicaciones.">
+    <meta property="og:image" content="https://i.imgur.com/eRyW7Pc.png">
+    <meta property="og:url" content="https://arielschat.onrender.com/login">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="ArielsChat - Chat en Tiempo Real Seguro y Fácil de Usar">
+    <meta name="twitter:description" content="Únete a ArielsChat para una comunicación en tiempo real, segura y sin complicaciones.">
+    <meta name="twitter:image" content="https://i.imgur.com/eRyW7Pc.png">
+    <meta name="twitter:site" content="@ArielsChat">
+    <meta name="twitter:creator" content="@Ariels875">
 </head>
 <body>
     <div class="login-box" id="login-box">
@@ -13,45 +26,45 @@
         <form id="login-form">
             <div class="user-box">
                 <input type="text" name="username" required>
-                <label>Username</label>
+                <label>Usuario</label>
             </div>
             <div class="user-box">
                 <input type="password" name="password" required>
-                <label>Password</label>
+                <label>Contraseña</label>
             </div>
             <a href="#" onclick="submitForm('login-form')">
                 <span></span>
                 <span></span>
                 <span></span>
                 <span></span>
-                Login
+                Entrar!
             </a>
         </form>
-        <h3>Don't have an account?</h3>
-        <button class="toggle-button" onclick="toggleForms()">Show Register Options</button>
+        <h3>No tienes una cuenta?</h3>
+        <button class="toggle-button" onclick="toggleForms()">Mostrar Opciones de Registro</button>
     </div>
 
     <div class="login-box" id="register-box" style="display: none;">
-        <h2>Register</h2>
+        <h2>Registrarse</h2>
         <form id="register-form">
             <div class="user-box">
                 <input type="text" name="username" required>
-                <label>Username</label>
+                <label>Nombre de usuario</label>
             </div>
             <div class="user-box">
                 <input type="password" name="password" required>
-                <label>Password</label>
+                <label>Contraseña</label>
             </div>
             <a href="#" onclick="submitForm('register-form')">
                 <span></span>
                 <span></span>
                 <span></span>
                 <span></span>
-                Register
+                Registrarse!
             </a>
         </form>
-        <h3>Already have an account?</h3>
-        <button class="toggle-button" onclick="toggleForms()">Show Login Options</button>
+        <h3>Ya tienes una cuenta?</h3>
+        <button class="toggle-button" onclick="toggleForms()">Mostrar opciones de inicio de sesión</button>
     </div>
 
     <div id="toast-container" class="toast-container"></div>
@@ -89,23 +102,23 @@
 
                 if (!response.ok) {
                     const errorText = await response.text();
-                    throw new Error(`Network response was not ok. Status: ${response.status}, Message: ${errorText}`);
+                    throw new Error(`La respuesta falló, intenta de nuevo. Status: ${response.status}`);
                 }
                 
                 const result = await response.json();
                 console.log(result);
 
                 if (formId === 'login-form') {
-                    showToast('Logged in successfully!', 'success');
+                    showToast('Sesión iniciada!', 'success');
                     setTimeout(() => {
                         window.location.href = '/index';
                     }, 1000);
                 } else {
-                    showToast('Registered successfully!', 'success');
+                    showToast('Registrado Exitosamente!', 'success');
                 }
             } catch (error) {
-                console.error('There was a problem with the fetch operation:', error);
-                showToast('An error occurred: ' + error.message, 'error');
+                console.error('Hubo un error con el servidor, intenta de nuevo.');
+                showToast('Algo no estuvo bien, intenta de nuevo.');
             }
         }
 

@@ -1,23 +1,139 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>ArielsChat</title>
-      <link rel="stylesheet" href="indexstyle.css">
-      <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-  </head>
-  <body>
-      <section id="chat">
-          <ul id="messages"></ul>
+<html lang="es">
 
-          <form id="form">
-              <input type="text" name="message" id="input" placeholder="Type a message" autocomplete="off" />
-              <button type="submit">Send</button>
-          </form>
-      </section>
-      <button id="logout-btn">Logout</button>
-      <div id="toast-container" class="toast-container"></div>
-      <script type="module" src="client.js"></script>
-  </body>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ArielsChat - Chat en Tiempo Real Seguro y Fácil de Usar</title>
+    <link href="./styles.css" rel="stylesheet">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="robots" content="index, follow">
+    <meta name="description" content="ArielsChat es una aplicación de chat en tiempo real que permite a los usuarios comunicarse de manera segura y fácil. Regístrate y empieza a chatear ahora.">
+    <meta name="keywords" content="chat en tiempo real, mensajería instantánea, ArielsChat, chat seguro, comunicación en línea">
+    <meta property="og:title" content="ArielsChat - Chat en Tiempo Real Seguro y Fácil de Usar">
+    <meta property="og:description" content="Únete a ArielsChat para una comunicación en tiempo real, segura y sin complicaciones.">
+    <meta property="og:image" content="https://i.imgur.com/eRyW7Pc.png">
+    <meta property="og:url" content="https://arielschat.onrender.com/">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="ArielsChat - Chat en Tiempo Real Seguro y Fácil de Usar">
+    <meta name="twitter:description" content="Únete a ArielsChat para una comunicación en tiempo real, segura y sin complicaciones.">
+    <meta name="twitter:image" content="https://i.imgur.com/eRyW7Pc.png">
+    <meta name="twitter:site" content="@ArielsChat">
+    <meta name="twitter:creator" content="@Ariels875">
+
+</head>
+
+<body class="bg-[#1f2937] text-white min-h-screen">
+    <style>
+        :root {
+            --foreground: 240 10% 3.9%;
+            --card: 0 0% 100%;
+            --card-foreground: 240 10% 3.9%;
+            --popover: 0 0% 100%;
+            --popover-foreground: 240 10% 3.9%;
+            --primary: 240 5.9% 10%;
+            --primary-foreground: 0 0% 98%;
+            --secondary: 240 4.8% 95.9%;
+            --secondary-foreground: 240 5.9% 10%;
+            --muted: 240 4.8% 95.9%;
+            --muted-foreground: 240 3.8% 45%;
+            --accent: 240 4.8% 95.9%;
+            --accent-foreground: 240 5.9% 10%;
+            --destructive: 0 72% 51%;
+            --destructive-foreground: 0 0% 98%;
+            --border: 240 5.9% 90%;
+            --input: 240 5.9% 90%;
+            --ring: 240 5.9% 10%;
+            --chart-1: 173 58% 39%;
+            --chart-2: 12 76% 61%;
+            --chart-3: 197 37% 24%;
+            --chart-4: 43 74% 66%;
+            --chart-5: 27 87% 67%;
+            --radius: 0.5rem;
+        }
+
+        img[src="/placeholder.svg"],
+        img[src="/placeholder-user.jpg"] {
+            filter: sepia(.3) hue-rotate(-60deg) saturate(.5) opacity(0.8)
+        }
+    </style>
+    <style class="dmm2 dm-sn" media="screen"></style>
+    <style>
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-family: 'Inter', sans-serif;
+            --font-sans-serif: 'Inter';
+        }
+    </style>
+    <style class="dmm2 dm-sn" media="screen"></style>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            --font-sans-serif: 'Inter';
+        }
+    </style>
+    <style class="dmm2 dm-sn" media="screen"></style>
+    <div class="flex flex-col h-screen bg-[#1f2937] text-white">
+        <header class="bg-[#111827] px-4 py-3 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="w-6 h-6 text-[#8b5cf6]" data-dm-inline-stroke="" style="--dm-inline-stroke: currentColor;">
+                    <path
+                        d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z">
+                    </path>
+                    <circle cx="12" cy="12" r="4"></circle>
+                </svg>
+                <h1 class="text-lg font-bold">ArielsChat</h1>
+            </div>
+            <div class="flex items-center gap-4">
+                <a class="hover:text-[#8b5cf6]" href="https://mpiq-clone.pages.dev/">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="w-6 h-6" data-dm-inline-stroke="" style="--dm-inline-stroke: currentColor;">
+                        <line x1="6" x2="10" y1="12" y2="12"></line>
+                        <line x1="8" x2="8" y1="10" y2="14"></line>
+                        <line x1="15" x2="15.01" y1="13" y2="13"></line>
+                        <line x1="18" x2="18.01" y1="11" y2="11"></line>
+                        <rect width="20" height="12" x="2" y="6" rx="2"></rect>
+                    </svg>
+                </a>
+                <a class="hover:text-[#8b5cf6]" href="https://ariels.pages.dev/">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="w-6 h-6" data-dm-inline-stroke="" style="--dm-inline-stroke: currentColor;">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <path d="M12 16v-4"></path>
+                        <path d="M12 8h.01"></path>
+                    </svg>
+                </a>
+                <a id="logout-btn" class="hover:text-[#8b5cf6]" href="#">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="w-6 h-6" data-dm-inline-stroke="" style="--dm-inline-stroke: currentColor;">
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                        <polyline points="16 17 21 12 16 7"></polyline>
+                        <line x1="21" x2="9" y1="12" y2="12"></line>
+                    </svg>
+                </a>
+            </div>
+        </header>
+        <main id="messages" class="flex-1 overflow-auto p-4" role="main">
+            <!-- Chat messages will be inserted here dynamically -->
+        </main>
+        <footer class="bg-[#111827] px-4 py-3">
+            <form id="form" class="flex items-center">
+                <input id="input" class="flex h-10 w-full border text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 flex-1 bg-[#1f2937] border-[#374151] rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#8b5cf6] mr-4" type="text" autocomplete="off" placeholder="Escribe algo...">
+                <button type="submit" class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-blue-600 text-white hover:bg-blue-500 hover:shadow-[0_4px_6px_-1px_rgba(59,130,246,0.5),0_2px_4px_-2px_rgba(59,130,246,0.5)] h-10 px-4 py-2">Enviar</button>
+            </form>
+        </footer>
+    </div>
+    <div id="toast-container" class="fixed top-5 right-5 z-50"></div>
+    <script type="module" src="./client.js"></script>
+</body>
+
 </html>

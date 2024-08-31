@@ -1,7 +1,6 @@
 import { io } from 'https://cdn.socket.io/4.3.2/socket.io.esm.min.js';
 import { showToast } from './toast.js';
 
-/* Función para obtener el nombre de usuario */
 const getUsername = async () => {
   try {
     const response = await fetch('/username');
@@ -14,17 +13,19 @@ const getUsername = async () => {
   }
 };
 
-/* Verificar si el usuario está loggeado */
+const getRandomColor = () => {
+  const colors = ['rgb(139, 92, 246)', 'rgb(52, 211, 153)', 'rgb(251, 113, 133)', 'rgb(251, 191, 36)'];
+  return colors[Math.floor(Math.random() * colors.length)];
+};
+
 const init = async () => {
   const username = await getUsername();
 
   if (!username) {
-    /* Redirigir al usuario a la página de login si no está autenticado */
     window.location.href = '/login';
     return;
   }
 
-  /* Conectar el socket si el usuario está autenticado */
   const socket = io({
     auth: {
       username,
@@ -38,10 +39,16 @@ const init = async () => {
   const logoutBtn = document.getElementById('logout-btn');
   
   socket.on('chat message', (msg, serverOffset, username) => {
-    const item = `<li>
-      <p>${msg}</p>
-      <small>${username}</small>
-    </li>`;
+    const color = getRandomColor();
+    const item = `
+      <div class="flex items-start gap-3 mb-4" style="color: ${color};">
+        <div class="rounded-full w-8 h-8 bg-[#8b5cf6] flex items-center justify-center text-sm font-bold">${username.charAt(0).toUpperCase()}</div>
+        <div>
+          <div class="font-bold">${username}</div>
+          <div>${msg}</div>
+        </div>
+      </div>
+    `;
     messages.insertAdjacentHTML('beforeend', item);
     socket.auth.serverOffset = serverOffset;
     messages.scrollTop = messages.scrollHeight;
@@ -49,7 +56,6 @@ const init = async () => {
 
   form.addEventListener('submit', (e) => {
     e.preventDefault();
-
     if (input.value) {
       socket.emit('chat message', input.value);
       input.value = '';
@@ -67,17 +73,15 @@ const init = async () => {
       if (!response.ok) {
         throw new Error('Network response was not ok ' + response.statusText);
       }
-      showToast('Logged in successfully', 'success');
+      showToast('Cerrando sesión!', 'success');
       setTimeout(() => {
         window.location.href = '/login';
-      }, 1000); /* Espera 1 segundo antes de redirigir */
+      }, 700);
     } catch (error) {
       console.error('There was a problem with the logout operation:', error);
       showToast('Error al cerrar sesión: ' + error.message, 'error');
     }
   });
-
 };
 
-/* Inicializar la aplicación del cliente */
 init();
