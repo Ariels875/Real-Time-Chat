@@ -5,11 +5,10 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "dev:css": "tailwindcss -i ./client/styles.css -o ./dist/styles.css --watch",
+    "dev:css": "tailwindcss -i ./client/styles.css -o ./client/styles.output.css --watch",
     "dev": "node --watch ./server/index.js & npm run dev:css",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build:css": "tailwindcss -i ./client/styles.css -o ./dist/styles.css --minify",
-    "build": "mkdir -p dist && cp -r client/* dist && npm run build:css"
+    "build:css": "tailwindcss -i ./client/styles.css -o ./client/styles.output.css --minify",
+    "build": "rm -rf dist && mkdir -p dist && cp -r client/* dist && npm run build:css && mv dist/styles.output.css dist/styles.css"
   },
   "keywords": [],
   "author": "",
