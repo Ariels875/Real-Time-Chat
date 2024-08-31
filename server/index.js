@@ -14,7 +14,7 @@ import { dirname } from 'path';
 dotenv.config();
 
 const port = process.env.PORT || 3000;
-process.env.NODE_ENV = 'production';
+const isProduction = process.env.NODE_ENV === 'production';
 
 /* Define __dirname*/
 const __filename = fileURLToPath(import.meta.url);
@@ -36,8 +36,17 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(logger('dev'));
 
-/*Servir archivos estáticos desde la carpeta 'client'*/
-app.use(express.static('client'));
+// Configura la carpeta de archivos estáticos
+const staticFolder = isProduction ? '../dist' : '../client';
+app.use(express.static(path.join(__dirname, staticFolder)));
+
+// Configura el tipo MIME para CSS
+app.use((req, res, next) => {
+  if (req.url.endsWith('.css')) {
+    res.type('text/css');
+  }
+  next();
+});
 
 /*Middleware para verificar el token JWT*/
 app.use((req, res, next) => {
@@ -119,11 +128,10 @@ app.get('/username', (req, res) => {
   res.json({ username: user.username });
 });
 
-/* Ruta protegida */
 app.get('/index', (req, res) => {
   const { user } = req.session;
   if (!user) return res.redirect('/login');
-  res.sendFile(path.resolve(__dirname + '/../client/index.html'));
+  res.sendFile(path.resolve(__dirname, '..', isProduction ? 'dist' : 'client', 'index.html'));
 });
 
 /* Ruta principal */
@@ -136,14 +144,12 @@ app.get('/', (req, res) => {
   }
 });
 
-/* Ruta para la página de login */
 app.get('/login', (req, res) => {
-  res.sendFile(path.resolve(__dirname + '/../client/login.html'));
+  res.sendFile(path.resolve(__dirname, '..', isProduction ? 'dist' : 'client', 'login.html'));
 });
 
-/* Ruta para la página de registro */
 app.get('/register', (req, res) => {
-  res.sendFile(path.resolve(__dirname + '/../client/login.html'));
+  res.sendFile(path.resolve(__dirname, '..', isProduction ? 'dist' : 'client', 'login.html'));
 });
 
 /* Ruta para el login */
