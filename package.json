@@ -8,7 +8,7 @@
     "dev:css": "tailwindcss -i ./client/styles.css -o ./client/styles.output.css --watch",
     "dev": "node --watch ./server/index.js & npm run dev:css",
     "build:css": "tailwindcss -i ./client/styles.css -o ./client/styles.output.css --minify",
-    "build": "rm -rf dist && mkdir -p dist && cp -r client/* dist && npm run build:css && mv dist/styles.output.css dist/styles.css"
+    "build": "rm -rf dist && mkdir -p dist && npm run build:css && cp -r client/* dist"
   },
   "keywords": [],
   "author": "",
