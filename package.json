@@ -6,12 +6,13 @@
   "type": "module",
   "scripts": {
     "dev:css": "tailwindcss -i ./client/styles.css -o ./client/styles.output.css --watch",
-    "dev": "node --watch ./server/index.js & npm run dev:css",
-    "build:css": "tailwindcss -i ./client/styles.css -o ./client/styles.output.css --minify",
-    "build": "rm -rf dist && mkdir -p dist && npm run build:css && cp -r client/* dist"
+    "dev": "rm -f ./client/styles.output.css && node --watch ./server/index.js & npm run dev:css",
+    "build:css": "rm -f ./client/styles.output.css && tailwindcss -i ./client/styles.css -o ./client/styles.output.css --minify",
+    "build": "npm run build:css",
+    "start": "node ./server/index.js"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": ["Real Time Chat","Chat Online"],
+  "author": "Ariels875",
   "license": "MIT",
   "dependencies": {
     "@libsql/client": "^0.5.3",
