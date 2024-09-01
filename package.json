@@ -8,7 +8,7 @@
     "dev:css": "tailwindcss -i ./client/styles.css -o ./client/styles.output.css --watch",
     "dev": "rm -f ./client/styles.output.css && node --watch ./server/index.js & npm run dev:css",
     "build:css": "rm -f ./client/styles.output.css && tailwindcss -i ./client/styles.css -o ./client/styles.output.css --minify",
-    "build": "npm install &&npm run build:css",
+    "build": "npm install && npm run build:css",
     "start": "node ./server/index.js"
   },
   "keywords": ["Real Time Chat","Chat Online"],
