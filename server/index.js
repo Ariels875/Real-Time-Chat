@@ -36,12 +36,13 @@ app.use(cookieParser());
 app.use(logger('dev'));
 
 // Configura el tipo MIME para CSS
-app.use((req, res, next) => {
-  if (req.url.endsWith('.css')) {
-    res.type('text/css');
+app.use(express.static(path.join(__dirname, '../client'), {
+  setHeaders: (res, path, stat) => {
+    if (path.endsWith('.css')) {
+      res.set('Content-Type', 'text/css');
+    }
   }
-  next();
-});
+}));
 
 /*Middleware para verificar el token JWT*/
 app.use((req, res, next) => {
@@ -113,6 +114,8 @@ io.on('connection', async (socket) => {
     }
   }
 });
+
+app.use(express.static(path.join(__dirname, '../client')));
 
 /* Ruta para obtener el nombre de usuario */
 app.get('/username', (req, res) => {
